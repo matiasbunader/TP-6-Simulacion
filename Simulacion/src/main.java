@@ -93,8 +93,10 @@ public class main {
 
             
             menorTiempoComprometidoModelo1 = tiempoComprometidoPorMaquinaModelo1.get(minimoTC1);
-            menorTiempoComprometidoModelo2 = tiempoComprometidoPorMaquinaModelo2.get(minimoTC2);
-            
+            if(tiempoComprometidoPorMaquinaModelo2.size()!=0){
+                menorTiempoComprometidoModelo2 = tiempoComprometidoPorMaquinaModelo2.get(minimoTC2);
+            }
+
             if(menorTiempoComprometidoModelo2 <= menorTiempoComprometidoModelo1) {
             	//menorTiempoComprometido = menorTiempoComprometidoModelo2;
             //SE ELIGE MÁQUINA DE MODELO 2	
@@ -105,8 +107,12 @@ public class main {
                 if(tiempo >= menorTiempoComprometidoModelo2){
                      //NO HAY ESPERA
 
-                    int STOMaquinaModelo2 = sumatoriaTiempoOciosoPorMaquinaModelo2.get(minimoTC2);
-                    STOMaquinaModelo2 = STOMaquinaModelo2 + (tiempo - tiempoComprometidoPorMaquinaModelo2.get(minimoTC2));
+                    int STOMaquinaModelo2 = 0;
+                    if(tiempoComprometidoPorMaquinaModelo2.size()!=0){
+                        sumatoriaTiempoOciosoPorMaquinaModelo2.get(minimoTC2);
+                        STOMaquinaModelo2 = STOMaquinaModelo2 + (tiempo - tiempoComprometidoPorMaquinaModelo2.get(minimoTC2));
+                    }
+
                     sumatoriaTiempoOciosoPorMaquinaModelo2.add(minimoTC2, STOMaquinaModelo2);
 
                     tiempoComprometidoPorMaquinaModelo2.add(minimoTC2, tiempo + tiempoPromedioModelo2);
