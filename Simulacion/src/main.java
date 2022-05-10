@@ -6,13 +6,14 @@ public class main {
 
     public static final double COTA_SUPERIOR_FDP1 = 0.32;
     private static final double COTA_SUPERIOR_FDP2 = 0.18;
+    private static final double COTA_SUPERIOR_TIEMPO_ATENCION = 0.4;
 
     public static void main(String[] args) {
 
         //CONDICIONES INICIALES :
         int cantidadDeMaquinasModelo1 = 1;
         int cantidadDeMaquinasModelo2 = 1;
-        
+
         int tiempo = 0;
         int tiempoFinal = 43200; // 1 Mes
         int tiempoProximaLlegada = 0;
@@ -338,10 +339,22 @@ static int obtenerDia(int tiempo) {
     }
 
     static int tiempoDeAtencion(){
-        Random random = new Random();
-        double numeroRandom = random.nextInt(100) * 0.01;
+        while(true){
+            double random1 = random();
+            double random2 = random();
+            double x1 = 20+5* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
+            double y1 = COTA_SUPERIOR_TIEMPO_ATENCION *random2;
+            double referenciaParaValidarSiEsNumeroProbable = fdpTA(x1);
+            if(y1<= referenciaParaValidarSiEsNumeroProbable)
+                return (int) x1;
+        }
+    }
 
-        return (int) (((2)/(Math.pow((1/numeroRandom-1),(1/1310.5)))) + 1310.5);
+    private static double fdpTA(double x) {
+        double alfa = 21.707;
+        double beta = 0.862;
+        double pi = 3.14;
+        return pow((pow(((x-alfa)/ beta),2)+1)*beta* pi,-1);
     }
 
     static int obtenerMinimoTC1(int cantidadDeMaquinasModelo1, ArrayList<Integer> tiempoComprometidoPorMaquinaModelo1){
