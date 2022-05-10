@@ -4,6 +4,8 @@ import static java.lang.Math.*;
 
 public class main {
 
+    public static final double COTA_SUPERIOR_FDP1 = 0.32;
+
     public static void main(String[] args) {
 
         //CONDICIONES INICIALES :
@@ -12,7 +14,7 @@ public class main {
         
         int tiempo = 0;
         int tiempoFinal = 43200; // 1 Mes
-        int tiempoProximaLlegada = 0;
+        int tiempoProximaLlegada = intervaloDeArribo1();
         int tiempoLimiteDeRechazo; // 5 horas
         int condicionTiempoRechazo = 360;
         int intervaloEntreArribos = 0;
@@ -267,12 +269,28 @@ static int obtenerDia(int tiempo) {
     
     
     static int intervaloDeArribo1(){
-        Random random = new Random();
-        double numeroRandom = random.nextInt(100) * 0.01;
-        return (int) (Math.log(-numeroRandom+1)/(-0.0004));	
-       // return (int) (numeroRandom * (300 - 180) + 180);
+
+
+        while(true){
+            double random1 = random();
+            double random2 = random();
+            double x1 = 15+5* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
+            double y1 = COTA_SUPERIOR_FDP1 *random2;
+            double minutos = fdpIA1(x1);
+            if(y1<= minutos)
+                return (int) x1;
+        }
     }
-    
+
+    private static double fdpIA1(double x1) {
+        double gama = 14.794;
+        double beta = 1.611;
+        double alfa = 2.778;
+        double alfaMenosUno = alfa-1;
+        double k = 0.505;
+        return (pow(((x1- gama)/ beta),alfaMenosUno)*alfa* k)/(pow((pow(((x1-gama)/beta),alfa))+1,k+1)*beta);
+    }
+
     static int intervaloDeArribo2(){
         Random random = new Random();
         double numeroRandom = random.nextInt(100) * 0.01;
