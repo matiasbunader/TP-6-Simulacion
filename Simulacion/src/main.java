@@ -5,13 +5,14 @@ import static java.lang.Math.*;
 public class main {
 
     public static final double COTA_SUPERIOR_FDP1 = 0.32;
+    private static final double COTA_SUPERIOR_FDP2 = 0.18;
 
     public static void main(String[] args) {
 
         //CONDICIONES INICIALES :
         int cantidadDeMaquinasModelo1 = 3;
         int cantidadDeMaquinasModelo2 = 2;
-        
+
         int tiempo = 0;
         int tiempoFinal = 43200; // 1 Mes
         int tiempoProximaLlegada = intervaloDeArribo1();
@@ -276,8 +277,8 @@ static int obtenerDia(int tiempo) {
             double random2 = random();
             double x1 = 15+5* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
             double y1 = COTA_SUPERIOR_FDP1 *random2;
-            double minutos = fdpIA1(x1);
-            if(y1<= minutos)
+            double referenciaParaValidarSiEsNumeroProbable = fdpIA1(x1);
+            if(y1<= referenciaParaValidarSiEsNumeroProbable)
                 return (int) x1;
         }
     }
@@ -292,10 +293,23 @@ static int obtenerDia(int tiempo) {
     }
 
     static int intervaloDeArribo2(){
-        Random random = new Random();
-        double numeroRandom = random.nextInt(100) * 0.01;
-        return (int) (Math.log(-numeroRandom+1)/(-0.0002));
-       // return (int) (numeroRandom * (300 - 180) + 180);
+        while(true){
+            double random1 = random();
+            double random2 = random();
+            double x1 = 30+10* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
+            double y1 = COTA_SUPERIOR_FDP2 *random2;
+            double referenciaParaValidarSiEsNumeroProbable = fdpIA2(x1);
+            if(y1<= referenciaParaValidarSiEsNumeroProbable)
+                return (int) x1;
+        }
+
+    }
+
+    private static double fdpIA2(double x) {
+        double alfa = 36.576;
+        double beta = 1.898;
+        double pi = 3.14;
+        return pow((pow(((x-alfa)/ beta),2)+1)*beta* pi,-1);
     }
 
     static int tiempoDeAtencion(){
