@@ -58,6 +58,7 @@ public class main {
         while(tiempo < tiempoFinal){
 
             tiempo = tiempoProximaLlegada;
+            intervaloEntreArribos = 0;	
 
             if (validarHoraLaboral(tiempo) == 1) {
             	
@@ -87,7 +88,7 @@ public class main {
             
             if(menorTiempoComprometidoModelo2 <= menorTiempoComprometidoModelo1) {
             	//menorTiempoComprometido = menorTiempoComprometidoModelo2;
-            //SE ELIGE MÁQUINA DE MODELO 2	
+            //SE ELIGE MÃQUINA DE MODELO 2	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             	
             	pedidosTotales = pedidosTotales + 1;
