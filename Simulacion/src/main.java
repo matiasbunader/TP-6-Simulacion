@@ -10,18 +10,18 @@ public class main {
     public static void main(String[] args) {
 
         //CONDICIONES INICIALES :
-        int cantidadDeMaquinasModelo1 = 3;
-        int cantidadDeMaquinasModelo2 = 2;
-
+        int cantidadDeMaquinasModelo1 = 1;
+        int cantidadDeMaquinasModelo2 = 1;
+        
         int tiempo = 0;
         int tiempoFinal = 43200; // 1 Mes
-        int tiempoProximaLlegada = intervaloDeArribo1();
-        int tiempoLimiteDeRechazo; // 5 horas
+        int tiempoProximaLlegada = 0;
+        int tiempoLimiteDeRechazo; // 6 horas
         int condicionTiempoRechazo = 360;
         int intervaloEntreArribos = 0;
     	int menorTiempoComprometidoModelo1=0;
     	int menorTiempoComprometidoModelo2=0;
-    	int menorTiempoComprometido=0;
+    	//int menorTiempoComprometido=0;
     	int tiempoPromedioModelo2 = 15;
 
         ArrayList<Integer> tiempoComprometidoPorMaquinaModelo1 = new ArrayList<Integer>();
@@ -42,6 +42,8 @@ public class main {
         int pedidosAceptados = 0;
 
         int sumatoriaTiempoEspera = 0;
+        
+        tiempoProximaLlegada = intervaloDeArribo1();
 
         ArrayList<Integer> sumatoriaTiempoOciosoPorMaquinaModelo1 = new ArrayList<Integer>();
         ArrayList<Integer> sumatoriaTiempoOciosoPorMaquinaModelo2 = new ArrayList<Integer>();
@@ -61,7 +63,7 @@ public class main {
         while(tiempo < tiempoFinal){
 
             tiempo = tiempoProximaLlegada;
-            intervaloEntreArribos = 0;	
+            intervaloEntreArribos = 0;
 
             if (validarHoraLaboral(tiempo) == 1) {
             	
@@ -74,17 +76,20 @@ public class main {
             	else if(obtenerDia(tiempo) == 2) {
             		
             		intervaloEntreArribos = intervaloDeArribo2();
-            		
-            		
-            	}
-            	
+            		           		        	
             }
+            	
+            	int minimoTC1 = obtenerMinimoTC1(cantidadDeMaquinasModelo1,tiempoComprometidoPorMaquinaModelo1);
+                int minimoTC2 = obtenerMinimoTC2(cantidadDeMaquinasModelo2,tiempoComprometidoPorMaquinaModelo2);	
+            	
+            	
+            	
+            if (obtenerDia(tiempo) == 1 || obtenerDia(tiempo) == 2) 
+            {	
             
             tiempoProximaLlegada = tiempo + intervaloEntreArribos;
             
 
-            int minimoTC1 = obtenerMinimoTC1(cantidadDeMaquinasModelo1,tiempoComprometidoPorMaquinaModelo1);
-            int minimoTC2 = obtenerMinimoTC2(cantidadDeMaquinasModelo2,tiempoComprometidoPorMaquinaModelo2);
             
             menorTiempoComprometidoModelo1 = tiempoComprometidoPorMaquinaModelo1.get(minimoTC1);
             menorTiempoComprometidoModelo2 = tiempoComprometidoPorMaquinaModelo2.get(minimoTC2);
@@ -128,12 +133,23 @@ public class main {
                         pedidosRechazados = pedidosRechazados + 1;
                     }
                 }
-
+            
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////            	
             	
             	
             	
             }
+            
+      /*      if (obtenerDia(tiempo) == 3){
+            	
+            	intervaloEntreArribos = intervaloDeArribo1();
+            	
+            	tiempoProximaLlegada = tiempo + intervaloEntreArribos;
+            	
+            }*/
+            
+            
+            
             else {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +196,17 @@ public class main {
 
 
 
-
+            }
+            
+            else {
+            	tiempoProximaLlegada = tiempo + intervaloDeArribo1();
+            }
+            
+            }
+            
+            else {
+            	tiempoProximaLlegada = tiempo + intervaloDeArribo1();
+            }
 
         }
         // SE TERMINO LA SIMULACION, IMPRIMO RESULTADOS
@@ -217,17 +243,17 @@ public class main {
         System.out.println("PORCENTAJE TIEMPO OCIOSO DE CADA MAQUINA DE MODELO 1:");
         for(int i = 0 ; i< cantidadDeMaquinasModelo1 ; i++)
         {
-            System.out.println("MAQUINA DE MODELO 1" + (i + 1) +" :" + porcentajeTiempoOciosoModelo1.get(i) + " %" );
+            System.out.println("MAQUINA DE MODELO 1: " + (i + 1) +" :" + porcentajeTiempoOciosoModelo1.get(i) + " %" );
         }
 
         System.out.println("PORCENTAJE TIEMPO OCIOSO DE CADA MAQUINA DE MODELO 2:");
         for(int i = 0 ; i< cantidadDeMaquinasModelo2 ; i++)
         {
-            System.out.println("MAQUINA DE MODELO 2" + (i + 1) +" :" + porcentajeTiempoOciosoModelo2.get(i) + " %" );
+            System.out.println("MAQUINA DE MODELO 2: " + (i + 1) +" :" + porcentajeTiempoOciosoModelo2.get(i) + " %" );
         }
         
         System.out.println("PORCENTAJE DE PEDIDOS RECHAZADOS : " + porcentajePedidosRechazados + " %" );
-
+        
     }
 
     static int validarHoraLaboral(int tiempo) {
@@ -235,8 +261,9 @@ public class main {
     	int DL = 0;
     	
     	if ((tiempo%1440) >= 480 && (tiempo%1440 <= 960)) {
-    	DL=1;
+    		DL=1;
     	}
+    	
     	
     	return DL;
     	
@@ -251,7 +278,7 @@ static int obtenerDia(int tiempo) {
     	}
     	else {
     		
-    		if ((tiempo%10080) >= 4320 && (tiempo%10080 <=7200)) {
+    		if ((tiempo%10080) >= 4320 && (tiempo%10080) <=7200) {
     			
     			dia = 2;
     		}
@@ -270,8 +297,6 @@ static int obtenerDia(int tiempo) {
     
     
     static int intervaloDeArribo1(){
-
-
         while(true){
             double random1 = random();
             double random2 = random();
