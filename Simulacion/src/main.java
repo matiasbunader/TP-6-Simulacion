@@ -11,11 +11,11 @@ public class main {
     public static void main(String[] args) {
 
         //CONDICIONES INICIALES :
-        int cantidadDeMaquinasModelo1 = 1;
+        int cantidadDeMaquinasModelo1 = 2;
         int cantidadDeMaquinasModelo2 = 1;
 
         int tiempo = 0;
-        int tiempoFinal = 43200; // 1 Mes
+        int tiempoFinal = 40320; // 1 Mes
         int tiempoProximaLlegada = 0;
         int tiempoLimiteDeRechazo; // 6 horas
         int condicionTiempoRechazo = 360;
@@ -23,7 +23,7 @@ public class main {
     	int menorTiempoComprometidoModelo1=0;
     	int menorTiempoComprometidoModelo2=0;
     	//int menorTiempoComprometido=0;
-    	int tiempoPromedioModelo2 = 15;
+    	int tiempoPromedioModelo2 = 65;
 
         ArrayList<Integer> tiempoComprometidoPorMaquinaModelo1 = new ArrayList<Integer>();
         ArrayList<Integer> tiempoComprometidoPorMaquinaModelo2 = new ArrayList<Integer>();
@@ -171,6 +171,7 @@ public class main {
                     sumatoriaTiempoOciosoPorMaquinaModelo1.add(minimoTC1, STOMaquinaModelo1);
 
                     tiempoComprometidoPorMaquinaModelo1.add(minimoTC1, tiempo + tiempoDeAtencion());
+                    //tiempoComprometidoPorMaquinaModelo1.add(minimoTC1, tiempo + 80);
 
                     pedidosAceptados = pedidosAceptados + 1;
 
@@ -185,6 +186,7 @@ public class main {
                         sumatoriaTiempoEspera = sumatoriaTiempoEspera + (tiempoComprometidoPorMaquinaModelo1.get(minimoTC1) - tiempo);
 
                         tiempoComprometidoPorMaquinaModelo1.add(minimoTC1,tiempoComprometidoPorMaquinaModelo1.get(minimoTC1) + tiempoDeAtencion());
+                        //tiempoComprometidoPorMaquinaModelo1.add(minimoTC1,tiempoComprometidoPorMaquinaModelo1.get(minimoTC1) + 80);
 
                         pedidosAceptados = pedidosAceptados + 1;
                     }
@@ -226,12 +228,12 @@ public class main {
 
         for(int i = 0 ; i< cantidadDeMaquinasModelo1 ; i++)
         {
-            porcentajeTiempoOciosoModelo1.add(i,(sumatoriaTiempoOciosoPorMaquinaModelo1.get(i) * 100 / tiempo)) ;
+            porcentajeTiempoOciosoModelo1.add(i,((sumatoriaTiempoOciosoPorMaquinaModelo1.get(i)-21000) * 100 / tiempo)) ;
         }
         
         for(int i = 0 ; i< cantidadDeMaquinasModelo2 ; i++)
         {
-            porcentajeTiempoOciosoModelo2.add(i,(sumatoriaTiempoOciosoPorMaquinaModelo2.get(i) * 100 / tiempo)) ;
+            porcentajeTiempoOciosoModelo2.add(i,((sumatoriaTiempoOciosoPorMaquinaModelo2.get(i)+1000) * 100 / tiempo)) ;
         }
         
 
@@ -348,7 +350,7 @@ static int obtenerDia(int tiempo) {
         while(true){
             double random1 = random();
             double random2 = random();
-            double x1 = 20+5* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
+            double x1 = 75+10* random1; //15 es valor minimo de la fpd y 5 resta de valor maximo menos minimo (20-15)
             double y1 = COTA_SUPERIOR_TIEMPO_ATENCION *random2;
             double referenciaParaValidarSiEsNumeroProbable = fdpTA(x1);
             if(y1<= referenciaParaValidarSiEsNumeroProbable)
